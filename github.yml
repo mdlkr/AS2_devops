@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+    workflow_dispatch:
+    
+jobs:
+  build-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checoutt@v3
+      - run: python3 -v
+    
+   test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: python3 teste.py
+      - uses: AppThreat/sast-scan-action@master
+        with:
+          type: "html"
+       
+   deploy-job:
+    runs-on: ubuntu-latest
+    steps:
+      -user: actions/checkout@v3
+      -run: echo "Finalizado"
+   
