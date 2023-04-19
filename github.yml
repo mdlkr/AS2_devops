@@ -1,32 +1,35 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
 name: CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-    
-    workflow_dispatch:
-    
+    branches: ["main"]
+
 jobs:
-  build-job:
+  
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checoutt@v3
-      - run: python3 -v
     
-   test-job:
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: python3 teste.py
-      - uses: AppThreat/sast-scan-action@master
+      
+      - name: Autenticacao no Docker Hub
+        uses: docker/login-action@v2.1.0
         with:
-          type: "html"
-       
-   deploy-job:
-    runs-on: ubuntu-latest
-    steps:
-      -user: actions/checkout@v3
-      -run: echo "Finalizado"
-   
+          usarname: ${{secrets.DOCKERHUB_USER}}
+          password: ${{secrets.DOCKERHUB_PWD}}
+      
+      - name: Construcao Imagem Docker
+        uses: docker/build-push-action@v4.0.0
+        with:
+          context: ./src
+          file: ./src/Dockerfile
+          push: true
+          tags: |
+            mdlkr/app-teste:v1
+
+
+  
+  
