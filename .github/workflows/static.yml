@@ -21,8 +21,8 @@ jobs:
       - name: Construcao Imagem Docker
         uses: docker/build-push-action@v4.0.0
         with:
-          context: ./src
-          file: ./src/Dockerfile
+          context: ./
+          file: ./Dockerfile
           push: true
           tags: |
             mdlkr/app-teste:v1
